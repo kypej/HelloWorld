@@ -14,11 +14,15 @@ var b = []int{88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 1, 2, 3, 4, 5
 func main() {
 	http.HandleFunc("/first", first)
 	http.HandleFunc("/second", second)
+	http.HandleFunc("/set", set)
+	http.HandleFunc("/delete", delete)
+	rootNode.doBTree(sourceSlice)
+	fmt.Println(rootNode.getNodeByIndex(62))
 	fmt.Println(sum(a))
 	fmt.Println(count(a))
 	fmt.Println(max(a))
 	fmt.Println(maxShift(b))
-	//http.ListenAndServe(":7777", nil)
+	http.ListenAndServe(":7777", nil)
 }
 
 func maxShift(slice []int) int {
@@ -70,4 +74,16 @@ func second(w http.ResponseWriter, req *http.Request) {
 		a = search(n)
 	}
 	w.Write([]byte(strconv.Itoa(a)))
+}
+
+func set(w http.ResponseWriter, req *http.Request) {
+	n, _ := strconv.Atoi(req.URL.Query().Get("i"))
+	rootNode.setValue(n)
+	w.Write([]byte(`ok`))
+}
+
+func delete(w http.ResponseWriter, req *http.Request) {
+	n, _ := strconv.Atoi(req.URL.Query().Get("i"))
+	rootNode.delValue(n)
+	w.Write([]byte(`ok`))
 }
